@@ -1,0 +1,21 @@
+
+volumes:
+  dinx_local_postgres_data: {}
+  dinx_local_postgres_data_backups: {}
+  dinx_local_redis_data: {}
+
+
+services:
+
+  postgres:
+    build:
+      # Build from repo root so Dockerfile paths resolve consistently.
+      context: ../..
+      dockerfile: ./compose/prod/postgres/Dockerfile
+    image: dinx_local_postgres
+    container_name: dinx_local_postgres
+    volumes:
+      - dinx_local_postgres_data:/var/lib/postgresql/data
+      - dinx_local_postgres_data_backups:/backups
+    env_file:
+      - ../../.envs/.local/.postgres
