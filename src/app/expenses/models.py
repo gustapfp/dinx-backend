@@ -1,5 +1,5 @@
 from enum import Enum
-from sqlmodel import Field
+from sqlmodel import Field, ForeignKey
 from datetime import datetime
 from src.config.models import BaseModel
 
@@ -15,4 +15,5 @@ class Transaction(BaseModel, table=True):
     date: datetime = Field(default=datetime.now())
     name: str = Field(default="")
     description: str = Field(default="")
-    category: str = Field(default="")
+    income_category: str | None = Field(ForeignKey("budget_category.name"))
+    expense_category: str | None = Field(ForeignKey("investment_category.name"))
