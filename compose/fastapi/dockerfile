@@ -1,0 +1,15 @@
+FROM ghcr.io/astral-sh/uv:python3.13-bookworm-slim
+
+WORKDIR /code
+
+COPY pyproject.toml uv.lock /code/
+
+RUN uv sync --frozen --no-dev --no-install-project
+
+ENV PATH="/code/.venv/bin:$PATH"
+
+COPY ./src /code/src
+COPY main.py /code/main.py
+
+CMD ["fastapi", "run", "main.py", "--port", "80"]
+

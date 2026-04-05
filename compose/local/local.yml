@@ -7,6 +7,15 @@ volumes:
 
 services:
 
+  fastapi:
+    build:
+      context: ../..
+      dockerfile: ./compose/fastapi/dockerfile
+    image: dinx_local_fastapi
+    container_name: dinx_local_fastapi
+    ports:
+      - "8000:80"
+
   postgres:
     build:
       # Build from repo root so Dockerfile paths resolve consistently.
