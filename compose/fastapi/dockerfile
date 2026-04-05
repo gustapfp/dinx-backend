@@ -11,5 +11,5 @@ ENV PATH="/code/.venv/bin:$PATH"
 COPY ./src /code/src
 COPY main.py /code/main.py
 
-CMD ["fastapi", "run", "main.py", "--port", "80"]
+CMD ["fastapi", "run", "main.py", "--port", "8000"]
 

@@ -14,7 +14,7 @@ services:
     image: dinx_local_fastapi
     container_name: dinx_local_fastapi
     ports:
-      - "8000:80"
+      - "8000:8000"
 
   postgres:
     build:
