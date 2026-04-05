@@ -1,7 +1,7 @@
 from enum import Enum
 from sqlmodel import Field, ForeignKey
 from datetime import datetime
-from src.config.models import BaseModel
+from src.config.models import DinxBaseModel
 
 
 class TransactionType(Enum):
@@ -9,7 +9,7 @@ class TransactionType(Enum):
     INCOME = "income"
 
 
-class Transaction(BaseModel, table=True):
+class Transaction(DinxBaseModel, table=True):
     type: TransactionType = Field(default=TransactionType.EXPENSE)
     amount: float = Field(default=0.0)
     date: datetime = Field(default=datetime.now())
