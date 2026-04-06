@@ -15,10 +15,14 @@ services:
     container_name: dinx_local_fastapi
     ports:
       - "8000:8000"
+    depends_on:
+      - postgres
+    env_file:
+      - ../../.envs/.local/.postgres
+      - ../../.envs/.local/.fastapi
 
   postgres:
     build:
-      # Build from repo root so Dockerfile paths resolve consistently.
       context: ../..
       dockerfile: ./compose/prod/postgres/Dockerfile
     image: dinx_local_postgres
@@ -28,3 +32,5 @@ services:
       - dinx_local_postgres_data_backups:/backups
     env_file:
       - ../../.envs/.local/.postgres
+    ports:
+    - "5432:5432"
