@@ -1,4 +1,3 @@
-# src/config/lifespan.py
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from src.config.db import create_db_and_tables
