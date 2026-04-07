@@ -3,6 +3,7 @@ volumes:
   dinx_local_postgres_data: {}
   dinx_local_postgres_data_backups: {}
   dinx_local_redis_data: {}
+  dinx_local_fastapi_venv: {}
 
 
 services:
@@ -10,9 +11,12 @@ services:
   fastapi:
     build:
       context: ../..
-      dockerfile: ./compose/fastapi/dockerfile
+      dockerfile: ./compose/local/fastapi/dockerfile
     image: dinx_local_fastapi
     container_name: dinx_local_fastapi
+    volumes:
+      - ../..:/code
+      - dinx_local_fastapi_venv:/code/.venv
     ports:
       - "8000:8000"
     depends_on:
