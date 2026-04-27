@@ -1,6 +1,12 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
 
-auth_router = APIRouter()
+from src.app.auth.models import Users
+from src.app.auth.utils.deps import get_current_user
+
+auth_router = APIRouter(
+    prefix="/auth",
+    tags=["auth"],
+)
 
 
 @auth_router.post("/login")
@@ -16,3 +22,8 @@ def register(request):
 @auth_router.post("/logout")
 def logout(request):
     return {"message": "Logout successful"}
+
+
+@auth_router.get("/me")
+async def me(current_user: Users = Depends(get_current_user)):
+    return current_user
