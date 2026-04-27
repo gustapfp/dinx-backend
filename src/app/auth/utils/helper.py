@@ -56,3 +56,17 @@ class TokenHelper:
         encoded_data.update({"exp": expire})
         encoded_jwt = jwt.encode(encoded_data, self.secret_key, algorithm=self.algorithm)
         return encoded_jwt
+
+    def decode_access_token(self, token: str) -> dict:
+        """Decode and validate a JWT access token.
+
+        Args:
+            token (str): The JWT token to decode.
+
+        Returns:
+            dict: The decoded token payload.
+
+        Raises:
+            jwt.InvalidTokenError: If the token is invalid or expired.
+        """
+        return jwt.decode(token, self.secret_key, algorithms=[self.algorithm])
