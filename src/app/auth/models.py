@@ -1,3 +1,4 @@
+from src.app.auth.schemas import UserRole
 from src.config.models import DinxBaseModel
 
 
@@ -7,4 +8,4 @@ class Users(DinxBaseModel, table=True):
     first_name: str
     last_name: str
     active: bool = True
-    role: str
+    role: UserRole = UserRole.USER
