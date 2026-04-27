@@ -1,14 +1,12 @@
 from datetime import datetime, timedelta, timezone
-from passlib.context import CryptContext
+
+import bcrypt
+import jwt
 
 from src.config.settings import settings
-import jwt
 
 
 class PasswordHelper:
-    def __init__(self):
-        self.pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-
     def hash_password(self, password: str) -> str:
         """Hash a password using bcrypt.
 
@@ -18,19 +16,19 @@ class PasswordHelper:
         Returns:
             str: The hashed password.
         """
-        return self.pwd_context.hash(password)
+        return bcrypt.hashpw(password.encode(), bcrypt.gensalt()).decode()
 
     def verify_password(self, password: str, hashed_password: str) -> bool:
-        """Verify a password using bcrypt.
+        """Verify a password against a bcrypt hash.
 
         Args:
-            password (str): The password to verify.
-            hashed_password (str): The hashed password to verify against.
+            password (str): The plain-text password to verify.
+            hashed_password (str): The stored bcrypt hash to verify against.
 
         Returns:
-            bool: True if the password is verified, False otherwise.
+            bool: True if the password matches, False otherwise.
         """
-        return self.pwd_context.verify(password, hashed_password)
+        return bcrypt.checkpw(password.encode(), hashed_password.encode())
 
 
 class TokenHelper:
