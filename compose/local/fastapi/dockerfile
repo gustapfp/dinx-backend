@@ -4,12 +4,13 @@ WORKDIR /code
 
 COPY pyproject.toml uv.lock /code/
 
-RUN uv sync --frozen --no-dev --no-install-project
+RUN uv sync --frozen --no-dev
 
 ENV PATH="/code/.venv/bin:$PATH"
+ENV PYTHONPATH="/code"
 
 COPY ./src /code/src
 COPY main.py /code/main.py
 
-CMD ["fastapi", "run", "main.py", "--port", "8000"]
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
 

@@ -6,8 +6,10 @@ readme = "README.md"
 requires-python = ">=3.14"
 dependencies = [
     "asyncpg>=0.31.0",
+    "bcrypt>=5.0.0",
     "fastapi[standard]>=0.135.1",
     "pydantic>=2.12.5",
+    "pyjwt>=2.12.1",
     "pytest>=9.0.2",
     "scalar-fastapi>=1.8.0",
     "sqlalchemy>=2.0.48",
@@ -16,3 +18,7 @@ dependencies = [
     "typing>=3.10.0.0",
     "uvicorn>=0.42.0",
 ]
+
+[tool.mypy]
+mypy_path = "src"
+

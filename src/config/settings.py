@@ -8,6 +8,8 @@ class Settings(BaseSettings):
     POSTGRES_DB: str
     POSTGRES_USER: str
     POSTGRES_PASSWORD: str
+    SECRET_KEY: str
+    JWT_ALGORITHM: str
 
     @property
     def database_url(self) -> str:
