@@ -2,6 +2,8 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+# Development 
+- Use docstrings to comment functions
 ## Commands
 
 **Install dependencies:**
@@ -26,9 +28,12 @@ mypy src/
 
 **Run tests:**
 ```bash
-pytest
-pytest tests/path/to/test_file.py::test_function_name  # single test
+uv run pytest                                                        # all tests
+uv run pytest src/tests/auth/                                        # auth tests only
+uv run pytest src/tests/auth/test_auth.py::test_login_success -v    # single test
 ```
+
+Tests use an isolated file-based SQLite database (no Docker needed). Each test gets a fresh DB via the `engine` fixture in `src/tests/conftest.py`.
 
 ## Architecture
 
@@ -58,7 +63,13 @@ These files must exist before running locally or via Docker.
 
 ## Code Style
 
-Only add comments to complex code where the intent is non-obvious.
+- Use **docstrings** on all functions and methods (Args / Returns / Raises sections)
+- Only add inline comments where the intent is non-obvious
+- No comments that just restate what the code does
+- Thin routers: HTTP wiring only — all business logic lives in the service layer (`services.py`)
+- One service class per domain, injected as a module-level singleton in the router
+- Async everywhere: always `await` DB operations, always use `AsyncSession`
+- Prefer explicit over implicit — no magic, no clever one-liners that need a comment to understand
 
 ## mypy
 
