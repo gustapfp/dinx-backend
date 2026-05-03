@@ -61,7 +61,7 @@ class TokenHelper:
             tuple[str, datetime]: Encoded JWT refresh token and its expiration datetime.
         """
         encoded_data = data.copy()
-        expires_at = datetime.now(timezone.utc) + timedelta(days=7)
+        expires_at = datetime.now() + timedelta(minutes=30)
         encoded_data.update({"exp": expires_at, "type": "refresh"})
         token = jwt.encode(encoded_data, self.secret_key, algorithm=self.algorithm)
         return token, expires_at
