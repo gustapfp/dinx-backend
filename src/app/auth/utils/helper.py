@@ -37,26 +37,37 @@ class TokenHelper:
         self.algorithm = settings.JWT_ALGORITHM
 
     def create_access_token(self, data: dict, expires_delta: timedelta | None = None) -> str:
-        """Create an access token.
+        """Create a short-lived access token.
 
         Args:
-            data (dict): The data to encode.
-            expires_delta (timedelta | None): The expiration time.
+            data (dict): The data to encode (must include "sub").
+            expires_delta (timedelta | None): Custom expiration; defaults to 15 minutes.
 
         Returns:
-            str: The encoded access token.
+            str: Encoded JWT access token.
         """
         encoded_data = data.copy()
-        if expires_delta:
-            expire = datetime.now(timezone.utc) + expires_delta
-        else:
-            expire = datetime.now(timezone.utc) + timedelta(minutes=15)
-        encoded_data.update({"exp": expire})
-        encoded_jwt = jwt.encode(encoded_data, self.secret_key, algorithm=self.algorithm)
-        return encoded_jwt
+        expire = datetime.now(timezone.utc) + (expires_delta or timedelta(minutes=15))
+        encoded_data.update({"exp": expire, "type": "access"})
+        return jwt.encode(encoded_data, self.secret_key, algorithm=self.algorithm)
 
-    def decode_access_token(self, token: str) -> dict:
-        """Decode and validate a JWT access token.
+    def create_refresh_token(self, data: dict) -> tuple[str, datetime]:
+        """Create a long-lived refresh token.
+
+        Args:
+            data (dict): The data to encode (must include "sub").
+
+        Returns:
+            tuple[str, datetime]: Encoded JWT refresh token and its expiration datetime.
+        """
+        encoded_data = data.copy()
+        expires_at = datetime.now(timezone.utc) + timedelta(days=7)
+        encoded_data.update({"exp": expires_at, "type": "refresh"})
+        token = jwt.encode(encoded_data, self.secret_key, algorithm=self.algorithm)
+        return token, expires_at
+
+    def decode_token(self, token: str) -> dict:
+        """Decode and validate a JWT token (access or refresh).
 
         Args:
             token (str): The JWT token to decode.
