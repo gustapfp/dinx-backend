@@ -1,3 +1,4 @@
+import uuid
 from datetime import datetime, timedelta, timezone
 
 import bcrypt
@@ -48,7 +49,7 @@ class TokenHelper:
         """
         encoded_data = data.copy()
         expire = datetime.now(timezone.utc) + (expires_delta or timedelta(minutes=15))
-        encoded_data.update({"exp": expire, "type": "access"})
+        encoded_data.update({"exp": expire, "type": "access", "jti": str(uuid.uuid4())})
         return jwt.encode(encoded_data, self.secret_key, algorithm=self.algorithm)
 
     def create_refresh_token(self, data: dict) -> tuple[str, datetime]:
@@ -61,7 +62,7 @@ class TokenHelper:
             tuple[str, datetime]: Encoded JWT refresh token and its expiration datetime.
         """
         encoded_data = data.copy()
-        expires_at = datetime.now() + timedelta(minutes=30)
+        expires_at = datetime.now(timezone.utc) + timedelta(minutes=30)
         encoded_data.update({"exp": expires_at, "type": "refresh"})
         token = jwt.encode(encoded_data, self.secret_key, algorithm=self.algorithm)
         return token, expires_at
